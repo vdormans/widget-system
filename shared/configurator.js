@@ -72,6 +72,16 @@ function createInput(key, def) {
       input.type = 'checkbox';
       input.checked = def.default;
       break;
+    case 'date':
+      input = document.createElement('input');
+      input.type = 'date';
+      input.value = def.default;
+      break;
+    case 'time':
+      input = document.createElement('input');
+      input.type = 'time';
+      input.value = def.default;
+      break;
     case 'number':
       input = document.createElement('input');
       input.type = 'number';
