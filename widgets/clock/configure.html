@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configurar: Reloj Flip</title>
+    <link rel="stylesheet" href="../../shared/theme.css">
+</head>
+<body>
+    <div class="page">
+        <h1>Configurar Reloj Flip</h1>
+        <div class="layout">
+            <form id="config-form" class="config-form"></form>
+            <div class="preview-wrap">
+                <iframe id="preview" class="preview-frame"></iframe>
+            </div>
+        </div>
+        <div class="url-box">
+            <input id="url-output" type="text" readonly>
+            <button id="copy-btn" type="button">Copiar URL</button>
+        </div>
+    </div>
+
+    <script type="module">
+        import schema from './schema.js';
+        import { renderConfigurator } from '../../shared/configurator.js';
+
+        renderConfigurator({
+            schema,
+            widgetUrl: './widget.html',
+            formEl: document.getElementById('config-form'),
+            previewEl: document.getElementById('preview'),
+            urlOutputEl: document.getElementById('url-output'),
+            copyBtnEl: document.getElementById('copy-btn')
+        });
+    </script>
+</body>
+</html>
