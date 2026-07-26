@@ -20,10 +20,10 @@ export default {
         }
       ]
     },
-    borderRadius: { type: 'number', label: 'Bordes redondeados (px)',   default: 16 },
-    arrowColor:   { type: 'color',  label: 'Color de las flechas',      default: '#ffffff' },
-    arrowBg:      { type: 'color',  label: 'Fondo del botón de flecha', default: '#000000' },
+    borderRadius: { type: 'number', label: 'Bordes redondeados (px)', default: 16 },
+    dotColor:     { type: 'color',  label: 'Color de los puntos',     default: '#ffffff' },
     aspectRatio:  { type: 'select', label: 'Formato de imagen',        options: ['1:1', '3:4', '9:16'], default: '3:4' },
     focalPoint:   { type: 'select', label: 'Posición de la imagen',    options: ['Izquierda', 'Centro', 'Derecha'], default: 'Centro' }
   }
 };
+
