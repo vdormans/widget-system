@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="dark light">
+    <title>Galería de Fotos</title>
+    <style>
+        html, body {
+            margin: 0;
+            background: transparent !important;
+            background-color: transparent !important;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        :root {
+            --radius: 16px;
+            --arrow-color: #ffffff;
+            --arrow-bg: #000000;
+        }
+        .gallery-container {
+            position: relative;
+            width: 100%;
+            max-width: 320px;
+            aspect-ratio: 4 / 5;
+            border-radius: var(--radius);
+            overflow: hidden;
+        }
+        .gallery-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        .nav-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: none;
+            background: var(--arrow-bg);
+            color: var(--arrow-color);
+            opacity: 0.55;
+            font-size: 16px;
+            cursor: pointer;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+        .nav-btn:hover {
+            opacity: 0.85;
+        }
+        #prev-btn { left: 10px; }
+        #next-btn { right: 10px; }
+        .placeholder {
+            display: none;
+            width: 100%;
+            max-width: 320px;
+            aspect-ratio: 4 / 5;
+            border: 1px dashed rgba(255, 255, 255, 0.3);
+            border-radius: var(--radius);
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 13px;
+            text-align: center;
+            padding: 20px;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="gallery-container" id="gallery-container">
+        <img id="gallery-img" src="" alt="">
+        <button class="nav-btn" id="prev-btn" aria-label="Anterior">‹</button>
+        <button class="nav-btn" id="next-btn" aria-label="Siguiente">›</button>
+    </div>
+    <div class="placeholder" id="placeholder">
+        Agrega hasta 5 imágenes en el configurador para verlas aquí.
+    </div>
+    <script type="module" src="./widget.js"></script>
+</body>
+</html>
