@@ -98,6 +98,130 @@ h1 {
   cursor: pointer;
 }
 
+.label-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.help-icon-wrapper {
+  position: relative;
+  display: inline-flex;
+}
+
+.help-icon {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: #262626;
+  color: var(--text-dim);
+  font-size: 10px;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.help-icon:hover {
+  border-color: var(--accent);
+  color: var(--text);
+}
+
+.help-popover {
+  display: none;
+  position: absolute;
+  top: 22px;
+  left: 0;
+  z-index: 10;
+  width: 240px;
+  background: #262626;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--text-dim);
+}
+
+.help-popover strong {
+  display: block;
+  color: var(--text);
+  margin-bottom: 6px;
+  font-size: 12px;
+}
+
+.help-popover a {
+  color: var(--accent);
+}
+
+.help-popover.is-open {
+  display: block;
+}
+
+.list-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.list-items {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.list-item {
+  display: flex;
+  gap: 6px;
+}
+
+.list-item input {
+  flex: 1;
+  background: #262626;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text);
+  padding: 8px 10px;
+  font-size: 13px;
+}
+
+.list-remove-btn {
+  background: #262626;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text-dim);
+  width: 32px;
+  cursor: pointer;
+}
+
+.list-remove-btn:hover {
+  color: var(--text);
+  border-color: var(--accent);
+}
+
+.list-add-btn {
+  background: transparent;
+  border: 1px dashed var(--border);
+  border-radius: 8px;
+  color: var(--text-dim);
+  padding: 8px;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.list-add-btn:hover:not(:disabled) {
+  color: var(--text);
+  border-color: var(--accent);
+}
+
+.list-add-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 .preview-wrap {
   flex: 1;
   min-width: 260px;
