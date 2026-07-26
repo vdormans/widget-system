@@ -8,18 +8,29 @@ const RATIO_MAP = { '1:1': '1 / 1', '3:4': '3 / 4', '9:16': '9 / 16' };
 const POSITION_MAP = { 'Izquierda': 'left center', 'Centro': 'center center', 'Derecha': 'right center' };
 
 document.documentElement.style.setProperty('--radius', `${config.borderRadius}px`);
-document.documentElement.style.setProperty('--arrow-color', config.arrowColor);
-document.documentElement.style.setProperty('--arrow-bg', config.arrowBg);
+document.documentElement.style.setProperty('--dot-color', config.dotColor);
 document.documentElement.style.setProperty('--aspect-ratio', RATIO_MAP[config.aspectRatio] || RATIO_MAP['3:4']);
 document.documentElement.style.setProperty('--img-position', POSITION_MAP[config.focalPoint] || POSITION_MAP['Centro']);
 
 const containerEl = document.getElementById('gallery-container');
 const placeholderEl = document.getElementById('placeholder');
 const imgEl = document.getElementById('gallery-img');
-const prevBtn = document.getElementById('prev-btn');
-const nextBtn = document.getElementById('next-btn');
+const dotsEl = document.getElementById('dots');
 
 let currentIndex = 0;
+
+// Construye un punto por imagen; cada uno navega directo a su índice al hacer clic
+images.forEach((_, idx) => {
+  const dot = document.createElement('button');
+  dot.type = 'button';
+  dot.className = 'dot';
+  dot.setAttribute('aria-label', `Ver imagen ${idx + 1}`);
+  dot.addEventListener('click', () => {
+    currentIndex = idx;
+    render();
+  });
+  dotsEl.appendChild(dot);
+});
 
 function render() {
   if (images.length === 0) {
@@ -30,20 +41,12 @@ function render() {
 
   imgEl.src = images[currentIndex];
 
-  // Las flechas solo aparecen si hay más de una imagen
-  const showArrows = images.length > 1;
-  prevBtn.style.display = showArrows ? 'flex' : 'none';
-  nextBtn.style.display = showArrows ? 'flex' : 'none';
+  // Los puntos solo aparecen si hay más de una imagen
+  dotsEl.style.display = images.length > 1 ? 'flex' : 'none';
+
+  [...dotsEl.children].forEach((dot, idx) => {
+    dot.classList.toggle('active', idx === currentIndex);
+  });
 }
-
-prevBtn.addEventListener('click', () => {
-  currentIndex = (currentIndex - 1 + images.length) % images.length;
-  render();
-});
-
-nextBtn.addEventListener('click', () => {
-  currentIndex = (currentIndex + 1) % images.length;
-  render();
-});
 
 render();
