@@ -22,12 +22,14 @@
             --radius: 16px;
             --arrow-color: #ffffff;
             --arrow-bg: #000000;
+            --aspect-ratio: 3 / 4;
+            --img-position: center center;
         }
         .gallery-container {
             position: relative;
             width: 100%;
             max-width: 320px;
-            aspect-ratio: 4 / 5;
+            aspect-ratio: var(--aspect-ratio);
             border-radius: var(--radius);
             overflow: hidden;
         }
@@ -35,6 +37,7 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
+            object-position: var(--img-position);
             display: block;
         }
         .nav-btn {
@@ -63,7 +66,7 @@
             display: none;
             width: 100%;
             max-width: 320px;
-            aspect-ratio: 4 / 5;
+            aspect-ratio: var(--aspect-ratio);
             border: 1px dashed rgba(255, 255, 255, 0.3);
             border-radius: var(--radius);
             color: rgba(255, 255, 255, 0.5);
