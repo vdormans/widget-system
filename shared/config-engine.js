@@ -25,6 +25,13 @@ export function readParams(schema) {
       case 'number':
         values[key] = Number(raw);
         break;
+      case 'list':
+        try {
+          values[key] = JSON.parse(raw);
+        } catch {
+          values[key] = def.default || [];
+        }
+        break;
       default:
         values[key] = raw;
     }
@@ -39,7 +46,7 @@ export function buildUrl(baseUrl, schema, values) {
 
   Object.entries(schema.params).forEach(([key, def]) => {
     const val = values[key] ?? def.default;
-    url.searchParams.set(key, val);
+    url.searchParams.set(key, def.type === 'list' ? JSON.stringify(val) : val);
   });
 
   return url.toString();
