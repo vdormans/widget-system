@@ -20,15 +20,21 @@
         }
         :root {
             --radius: 16px;
-            --arrow-color: #ffffff;
-            --arrow-bg: #000000;
+            --dot-color: #ffffff;
             --aspect-ratio: 3 / 4;
             --img-position: center center;
+        }
+        .gallery-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            width: 100%;
+            max-width: 320px;
         }
         .gallery-container {
             position: relative;
             width: 100%;
-            max-width: 320px;
             aspect-ratio: var(--aspect-ratio);
             border-radius: var(--radius);
             overflow: hidden;
@@ -40,28 +46,25 @@
             object-position: var(--img-position);
             display: block;
         }
-        .nav-btn {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            border: none;
-            background: var(--arrow-bg);
-            color: var(--arrow-color);
-            opacity: 0.55;
-            font-size: 16px;
-            cursor: pointer;
+        .dots {
             display: none;
+            gap: 8px;
             align-items: center;
             justify-content: center;
         }
-        .nav-btn:hover {
-            opacity: 0.85;
+        .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            border: 1.5px solid var(--dot-color);
+            background: transparent;
+            padding: 0;
+            cursor: pointer;
+            transition: background 0.15s ease;
         }
-        #prev-btn { left: 10px; }
-        #next-btn { right: 10px; }
+        .dot.active {
+            background: var(--dot-color);
+        }
         .placeholder {
             display: none;
             width: 100%;
@@ -79,13 +82,14 @@
     </style>
 </head>
 <body>
-    <div class="gallery-container" id="gallery-container">
-        <img id="gallery-img" src="" alt="">
-        <button class="nav-btn" id="prev-btn" aria-label="Anterior">‹</button>
-        <button class="nav-btn" id="next-btn" aria-label="Siguiente">›</button>
-    </div>
-    <div class="placeholder" id="placeholder">
-        Agrega hasta 5 imágenes en el configurador para verlas aquí.
+    <div class="gallery-wrapper">
+        <div class="gallery-container" id="gallery-container">
+            <img id="gallery-img" src="" alt="">
+        </div>
+        <div class="dots" id="dots"></div>
+        <div class="placeholder" id="placeholder">
+            Agrega hasta 5 imágenes en el configurador para verlas aquí.
+        </div>
     </div>
     <script type="module" src="./widget.js"></script>
 </body>
