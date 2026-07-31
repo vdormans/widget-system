@@ -31,6 +31,8 @@ export function renderConfigurator({ schema, widgetUrl, formEl, previewEl, urlOu
 
     if (def.type === 'list') {
       field.appendChild(createListField(key, def, values, update));
+    } else if (def.type === 'object-list') {
+      field.appendChild(createObjectListField(key, def, values, update));
     } else {
       const input = createInput(key, def);
       input.addEventListener('input', () => {
@@ -107,6 +109,7 @@ function createInput(key, def) {
   }
 
   input.id = `field-${key}`;
+  if (def.placeholder && 'placeholder' in input) input.placeholder = def.placeholder;
   return input;
 }
 
@@ -175,6 +178,91 @@ function createListField(key, def, values, onChange) {
   return wrapper;
 }
 
+function createObjectListField(key, def, values, onChange) {
+  const wrapper = document.createElement('div');
+  wrapper.className = 'list-field';
+
+  const itemsContainer = document.createElement('div');
+  itemsContainer.className = 'object-list-items';
+  wrapper.appendChild(itemsContainer);
+
+  const addBtn = document.createElement('button');
+  addBtn.type = 'button';
+  addBtn.className = 'list-add-btn';
+
+  const max = def.max || Infinity;
+
+  function makeDefaultItem() {
+    const item = {};
+    def.itemFields.forEach(f => (item[f.key] = f.default));
+    return item;
+  }
+
+  function renderItems() {
+    itemsContainer.innerHTML = '';
+
+    values[key].forEach((item, idx) => {
+      const row = document.createElement('div');
+      row.className = 'object-list-item';
+
+      def.itemFields.forEach(fieldDef => {
+        if (fieldDef.preview === 'color') {
+          const swatch = document.createElement('span');
+          swatch.className = 'color-preview-swatch';
+          swatch.style.background = item[fieldDef.key] || fieldDef.default;
+          row.appendChild(swatch);
+
+          const input = createInput(`${key}-${idx}-${fieldDef.key}`, { ...fieldDef, default: item[fieldDef.key] });
+          input.addEventListener('input', () => {
+            item[fieldDef.key] = input.value;
+            swatch.style.background = input.value;
+            onChange();
+          });
+          row.appendChild(input);
+        } else {
+          const input = createInput(`${key}-${idx}-${fieldDef.key}`, { ...fieldDef, default: item[fieldDef.key] });
+          input.addEventListener('input', () => {
+            item[fieldDef.key] = fieldDef.type === 'boolean' ? input.checked : input.value;
+            onChange();
+          });
+          row.appendChild(input);
+        }
+      });
+
+      const removeBtn = document.createElement('button');
+      removeBtn.type = 'button';
+      removeBtn.className = 'list-remove-btn';
+      removeBtn.textContent = '✕';
+      removeBtn.addEventListener('click', () => {
+        values[key].splice(idx, 1);
+        renderItems();
+        onChange();
+      });
+      row.appendChild(removeBtn);
+
+      itemsContainer.appendChild(row);
+    });
+
+    const atMax = values[key].length >= max;
+    addBtn.disabled = atMax;
+    addBtn.textContent = atMax
+      ? `Máximo ${max} alcanzado`
+      : `${def.addLabel || '+ Agregar'}${max !== Infinity ? ` (${values[key].length}/${max})` : ''}`;
+  }
+
+  addBtn.addEventListener('click', () => {
+    if (values[key].length < max) {
+      values[key].push(makeDefaultItem());
+      renderItems();
+      onChange();
+    }
+  });
+
+  renderItems();
+  wrapper.appendChild(addBtn);
+  return wrapper;
+}
+
 function createHelpIcon(item) {
   const wrapper = document.createElement('span');
   wrapper.className = 'help-icon-wrapper';
@@ -209,7 +297,11 @@ document.addEventListener('click', () => {
 function getDefaults(schema) {
   const values = {};
   Object.entries(schema.params).forEach(([key, def]) => {
-    values[key] = def.type === 'list' ? [...(def.default || [])] : def.default;
+    if (def.type === 'list' || def.type === 'object-list') {
+      values[key] = JSON.parse(JSON.stringify(def.default || []));
+    } else {
+      values[key] = def.default;
+    }
   });
   return values;
 }
