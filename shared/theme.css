@@ -217,6 +217,37 @@ h1 {
   border-color: var(--accent);
 }
 
+.object-list-items {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.object-list-item {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.object-list-item input {
+  flex: 1;
+  min-width: 0;
+  background: #262626;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text);
+  padding: 8px 10px;
+  font-size: 13px;
+}
+
+.color-preview-swatch {
+  width: 32px;
+  height: 32px;
+  min-width: 32px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+}
+
 .list-add-btn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
