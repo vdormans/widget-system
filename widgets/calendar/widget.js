@@ -19,14 +19,10 @@ const DAY_LABELS = {
   Domingo: ['D', 'L', 'M', 'M', 'J', 'V', 'S']
 };
 
-const now = new Date();
-const year = now.getFullYear();
-const month = now.getMonth();
-const today = now.getDate();
+const baseDate = new Date(); // fecha real de hoy, no cambia
+let offset = 0; // meses de diferencia respecto al mes actual
 
-document.getElementById('month-label').textContent = `${MONTHS[month]} ${year}`;
-
-// Encabezado de días de la semana, según si inicia en Lunes o Domingo
+// Encabezado de días de la semana: se arma una sola vez, no cambia al navegar
 const dayLabels = DAY_LABELS[config.startDay] || DAY_LABELS.Lunes;
 const headerRow = document.getElementById('day-headers');
 dayLabels.forEach(label => {
@@ -36,25 +32,59 @@ dayLabels.forEach(label => {
   headerRow.appendChild(cell);
 });
 
-// getDay() de JS siempre devuelve 0=Domingo..6=Sábado; lo ajustamos según el inicio elegido
-const firstWeekday = new Date(year, month, 1).getDay();
-const offset = config.startDay === 'Domingo' ? firstWeekday : (firstWeekday + 6) % 7;
-const daysInMonth = new Date(year, month + 1, 0).getDate();
-
+const monthLabelEl = document.getElementById('month-label');
 const grid = document.getElementById('days-grid');
+const prevBtn = document.getElementById('prev-month');
+const nextBtn = document.getElementById('next-month');
 
-for (let i = 0; i < offset; i++) {
-  const empty = document.createElement('div');
-  empty.className = 'day-cell empty';
-  grid.appendChild(empty);
+function renderMonth() {
+  const viewDate = new Date(baseDate.getFullYear(), baseDate.getMonth() + offset, 1);
+  const year = viewDate.getFullYear();
+  const month = viewDate.getMonth();
+  const isCurrentMonth = offset === 0;
+
+  monthLabelEl.textContent = `${MONTHS[month]} ${year}`;
+  grid.innerHTML = '';
+
+  const firstWeekday = new Date(year, month, 1).getDay();
+  const offsetCells = config.startDay === 'Domingo' ? firstWeekday : (firstWeekday + 6) % 7;
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+  const totalRows = Math.ceil((offsetCells + daysInMonth) / 7);
+  grid.style.gridTemplateRows = `repeat(${totalRows}, 1fr)`;
+
+  for (let i = 0; i < offsetCells; i++) {
+    grid.appendChild(document.createElement('div'));
+  }
+
+  for (let d = 1; d <= daysInMonth; d++) {
+    const cell = document.createElement('div');
+    cell.className = 'day-cell';
+
+    const number = document.createElement('span');
+    number.className = 'day-number';
+    if (isCurrentMonth && d === baseDate.getDate()) {
+      number.classList.add('today');
+    }
+    number.textContent = d;
+
+    cell.appendChild(number);
+    grid.appendChild(cell);
+  }
 }
 
-for (let d = 1; d <= daysInMonth; d++) {
-  const cell = document.createElement('div');
-  cell.className = 'day-cell';
-  if (d === today) cell.classList.add('today');
-  cell.textContent = d;
-  grid.appendChild(cell);
+renderMonth();
+
+if (config.navigable) {
+  prevBtn.style.display = 'flex';
+  nextBtn.style.display = 'flex';
+  prevBtn.addEventListener('click', () => {
+    offset -= 1;
+    renderMonth();
+  });
+  nextBtn.addEventListener('click', () => {
+    offset += 1;
+    renderMonth();
+  });
 }
 
 // Elige texto claro u oscuro para el número del día actual, según qué tan claro sea el color de acento
