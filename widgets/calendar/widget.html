@@ -28,18 +28,44 @@
         }
         .calendar-card {
             width: 100%;
-            max-width: 300px;
+            max-width: 320px;
+            aspect-ratio: 4 / 3;
             background: var(--bg);
             color: var(--text);
             border-radius: var(--radius);
-            padding: 18px;
+            padding: 16px;
             box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+        }
+        .month-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        .month-nav {
+            display: none;
+            align-items: center;
+            justify-content: center;
+            width: 20px;
+            height: 20px;
+            background: none;
+            border: none;
+            color: var(--text);
+            font-size: 16px;
+            opacity: 0.7;
+            cursor: pointer;
+            padding: 0;
+        }
+        .month-nav:hover {
+            opacity: 1;
         }
         .month-label {
+            flex: 1;
             text-align: center;
             font-weight: 700;
-            font-size: 15px;
-            margin-bottom: 14px;
+            font-size: 14px;
         }
         .day-headers,
         .days-grid {
@@ -56,17 +82,25 @@
             opacity: 0.55;
         }
         .days-grid {
-            row-gap: 6px;
+            flex: 1;
+            min-height: 0;
+            row-gap: 2px;
         }
         .day-cell {
-            aspect-ratio: 1;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 13px;
-            border-radius: 50%;
         }
-        .day-cell.today {
+        .day-number {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            font-size: 12px;
+        }
+        .day-number.today {
             background: var(--accent);
             color: var(--today-text);
             font-weight: 700;
@@ -75,7 +109,11 @@
 </head>
 <body>
     <div class="calendar-card">
-        <div class="month-label" id="month-label"></div>
+        <div class="month-header">
+            <button class="month-nav" id="prev-month" aria-label="Mes anterior">‹</button>
+            <div class="month-label" id="month-label"></div>
+            <button class="month-nav" id="next-month" aria-label="Mes siguiente">›</button>
+        </div>
         <div class="day-headers" id="day-headers"></div>
         <div class="days-grid" id="days-grid"></div>
     </div>
