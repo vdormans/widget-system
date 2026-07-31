@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="dark light">
+    <title>Paleta de Colores</title>
+    <style>
+        html, body {
+            margin: 0;
+            background: transparent !important;
+            background-color: transparent !important;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        :root {
+            --radius: 8px;
+        }
+        .palette-wrapper {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            justify-content: center;
+            padding: 10px;
+        }
+        .color-card {
+            width: 90px;
+            display: flex;
+            flex-direction: column;
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+        }
+        .color-swatch {
+            height: 80px;
+        }
+        .color-info {
+            background: #ffffff;
+            padding: 8px 7px;
+            text-align: left;
+        }
+        .color-name {
+            font-size: 10px;
+            font-weight: 700;
+            color: #171717;
+            margin-bottom: 3px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .color-hex {
+            display: block;
+            width: 100%;
+            font-size: 10px;
+            font-family: 'Courier New', monospace;
+            color: #555555;
+            background: none;
+            border: none;
+            padding: 0;
+            text-align: left;
+            cursor: pointer;
+        }
+        .color-hex:hover {
+            text-decoration: underline;
+        }
+        .placeholder {
+            display: none;
+            max-width: 320px;
+            border: 1px dashed rgba(255, 255, 255, 0.3);
+            border-radius: 12px;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 13px;
+            text-align: center;
+            padding: 20px;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="palette-wrapper" id="palette-wrapper"></div>
+    <div class="placeholder" id="placeholder">
+        Agrega colores en el configurador para verlos aquí.
+    </div>
+    <script type="module" src="./widget.js"></script>
+</body>
+</html>
