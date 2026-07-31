@@ -5,6 +5,9 @@
  * query params según un "schema" y construir URLs a partir de ellos.
  */
 
+// Tipos cuyo valor es un array/objeto y se serializa como JSON en la URL
+const JSON_TYPES = ['list', 'object-list'];
+
 // Lee los parámetros actuales de la URL (usado DENTRO del widget.html)
 export function readParams(schema) {
   const params = new URLSearchParams(window.location.search);
@@ -26,6 +29,7 @@ export function readParams(schema) {
         values[key] = Number(raw);
         break;
       case 'list':
+      case 'object-list':
         try {
           values[key] = JSON.parse(raw);
         } catch {
@@ -46,7 +50,7 @@ export function buildUrl(baseUrl, schema, values) {
 
   Object.entries(schema.params).forEach(([key, def]) => {
     const val = values[key] ?? def.default;
-    url.searchParams.set(key, def.type === 'list' ? JSON.stringify(val) : val);
+    url.searchParams.set(key, JSON_TYPES.includes(def.type) ? JSON.stringify(val) : val);
   });
 
   return url.toString();
