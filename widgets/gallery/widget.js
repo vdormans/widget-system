@@ -18,6 +18,8 @@ const imgEl = document.getElementById('gallery-img');
 const dotsEl = document.getElementById('dots');
 
 let currentIndex = 0;
+let isTransitioning = false;
+const FADE_MS = 200;
 
 // Construye un punto por imagen; cada uno navega directo a su índice al hacer clic
 images.forEach((_, idx) => {
@@ -25,12 +27,30 @@ images.forEach((_, idx) => {
   dot.type = 'button';
   dot.className = 'dot';
   dot.setAttribute('aria-label', `Ver imagen ${idx + 1}`);
-  dot.addEventListener('click', () => {
-    currentIndex = idx;
-    render();
-  });
+  dot.addEventListener('click', () => goToImage(idx));
   dotsEl.appendChild(dot);
 });
+
+function goToImage(idx) {
+  if (idx === currentIndex || isTransitioning) return;
+  isTransitioning = true;
+
+  // Fade-out sutil, luego cambia la imagen y hace fade-in
+  imgEl.style.opacity = '0';
+  setTimeout(() => {
+    currentIndex = idx;
+    imgEl.src = images[currentIndex];
+    updateDots();
+    imgEl.style.opacity = '1';
+    isTransitioning = false;
+  }, FADE_MS);
+}
+
+function updateDots() {
+  [...dotsEl.children].forEach((dot, idx) => {
+    dot.classList.toggle('active', idx === currentIndex);
+  });
+}
 
 function render() {
   if (images.length === 0) {
@@ -39,14 +59,13 @@ function render() {
     return;
   }
 
+  // Primera carga: sin transición, se muestra directo
   imgEl.src = images[currentIndex];
 
   // Los puntos solo aparecen si hay más de una imagen
   dotsEl.style.display = images.length > 1 ? 'flex' : 'none';
 
-  [...dotsEl.children].forEach((dot, idx) => {
-    dot.classList.toggle('active', idx === currentIndex);
-  });
+  updateDots();
 }
 
 render();
