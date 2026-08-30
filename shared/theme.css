@@ -83,13 +83,19 @@ h1 {
 }
 
 .field input,
-.field select {
+.field select,
+.field textarea {
   background: #262626;
   border: 1px solid var(--border);
   border-radius: 8px;
   color: var(--text);
   padding: 8px 10px;
   font-size: 14px;
+  font-family: inherit;
+}
+
+.field textarea {
+  resize: vertical;
 }
 
 .field input[type="color"] {
