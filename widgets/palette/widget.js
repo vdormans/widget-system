@@ -1,5 +1,6 @@
 import schema from './schema.js';
 import { readParams } from '../../shared/config-engine.js';
+import { copyToClipboard } from '../../shared/clipboard.js';
 
 const config = readParams(schema);
 document.documentElement.style.setProperty('--radius', `${config.borderRadius}px`);
@@ -54,27 +55,4 @@ function buildCard(color) {
   card.appendChild(info);
 
   return card;
-}
-
-// Intenta el método moderno; si el navegador lo bloquea (común dentro de iframes embebidos),
-// recurre al método clásico de seleccionar texto + execCommand
-async function copyToClipboard(text) {
-  try {
-    await navigator.clipboard.writeText(text);
-    return true;
-  } catch {
-    try {
-      const temp = document.createElement('textarea');
-      temp.value = text;
-      temp.style.position = 'fixed';
-      temp.style.opacity = '0';
-      document.body.appendChild(temp);
-      temp.select();
-      document.execCommand('copy');
-      document.body.removeChild(temp);
-      return true;
-    } catch {
-      return false;
-    }
-  }
 }
