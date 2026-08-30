@@ -102,6 +102,11 @@ function createInput(key, def) {
       input.type = 'number';
       input.value = def.default;
       break;
+    case 'textarea':
+      input = document.createElement('textarea');
+      input.rows = def.rows || 3;
+      input.value = def.default;
+      break;
     default:
       input = document.createElement('input');
       input.type = 'text';
