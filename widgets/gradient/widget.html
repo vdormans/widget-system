@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="dark light">
+    <title>Degradado de Colores</title>
+    <style>
+        html, body {
+            margin: 0;
+            background: transparent !important;
+            background-color: transparent !important;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        :root {
+            --radius: 16px;
+        }
+        .gradient-card {
+            width: 140px;
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            display: flex;
+            flex-direction: column;
+        }
+        .gradient-swatch {
+            height: 110px;
+        }
+        .hex-list {
+            background: #ffffff;
+            padding: 12px 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        .hex-item {
+            display: block;
+            width: 100%;
+            background: none;
+            border: none;
+            padding: 0;
+            text-align: left;
+            font-family: 'Courier New', monospace;
+            font-weight: 700;
+            font-size: 13px;
+            cursor: pointer;
+        }
+        .hex-item:hover {
+            text-decoration: underline;
+        }
+        .placeholder {
+            display: none;
+            max-width: 320px;
+            border: 1px dashed rgba(255, 255, 255, 0.3);
+            border-radius: 12px;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 13px;
+            text-align: center;
+            padding: 20px;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="gradient-card" id="gradient-card">
+        <div class="gradient-swatch" id="gradient-swatch"></div>
+        <div class="hex-list" id="hex-list"></div>
+    </div>
+    <div class="placeholder" id="placeholder">
+        Agrega hasta 8 colores en el configurador para ver el degradado.
+    </div>
+    <script type="module" src="./widget.js"></script>
+</body>
+</html>
