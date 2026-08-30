@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="dark light">
+    <title>Frase</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        html, body {
+            margin: 0;
+            background: transparent !important;
+            background-color: transparent !important;
+        }
+        body {
+            font-family: 'Poppins', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        :root {
+            --radius: 20px;
+            --aspect-ratio: 3 / 4;
+            --border-width: 1px;
+            --border-color: #ffffff;
+            --text-color: #ffffff;
+        }
+        .quote-card {
+            position: relative;
+            width: 100%;
+            max-width: 340px;
+            aspect-ratio: var(--aspect-ratio);
+            border-radius: var(--radius);
+            border: var(--border-width) solid var(--border-color);
+            box-sizing: border-box;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 32px 28px;
+        }
+        .quote-overlay {
+            position: absolute;
+            inset: 0;
+            display: none;
+        }
+        .quote-symbol {
+            position: relative;
+            z-index: 1;
+            font-size: 32px;
+            color: var(--text-color);
+            margin-bottom: 24px;
+        }
+        .quote-text {
+            position: relative;
+            z-index: 1;
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            font-size: 17px;
+            line-height: 1.5;
+            color: var(--text-color);
+        }
+        .quote-text::before {
+            content: '\201C';
+        }
+        .quote-text::after {
+            content: '\201D';
+        }
+        .quote-author {
+            position: relative;
+            z-index: 1;
+            align-self: flex-end;
+            font-size: 13px;
+            font-style: italic;
+            color: var(--text-color);
+            opacity: 0.8;
+        }
+    </style>
+</head>
+<body>
+    <div class="quote-card" id="quote-card">
+        <div class="quote-overlay" id="quote-overlay"></div>
+        <div class="quote-symbol" id="quote-symbol"></div>
+        <div class="quote-text" id="quote-text"></div>
+        <div class="quote-author" id="quote-author"></div>
+    </div>
+    <script type="module" src="./widget.js"></script>
+</body>
+</html>
