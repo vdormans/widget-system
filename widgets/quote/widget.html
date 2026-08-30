@@ -52,13 +52,15 @@
             color: var(--text-color);
             margin-bottom: 24px;
         }
-        .quote-text {
+        .quote-text-wrap {
             position: relative;
             z-index: 1;
             flex: 1;
             display: flex;
             align-items: center;
             justify-content: center;
+        }
+        .quote-text {
             text-align: center;
             font-size: 17px;
             line-height: 1.5;
@@ -85,7 +87,9 @@
     <div class="quote-card" id="quote-card">
         <div class="quote-overlay" id="quote-overlay"></div>
         <div class="quote-symbol" id="quote-symbol"></div>
-        <div class="quote-text" id="quote-text"></div>
+        <div class="quote-text-wrap">
+            <div class="quote-text" id="quote-text"></div>
+        </div>
         <div class="quote-author" id="quote-author"></div>
     </div>
     <script type="module" src="./widget.js"></script>
