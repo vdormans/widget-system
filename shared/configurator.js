@@ -33,6 +33,8 @@ export function renderConfigurator({ schema, widgetUrl, formEl, previewEl, urlOu
       field.appendChild(createListField(key, def, values, update));
     } else if (def.type === 'object-list') {
       field.appendChild(createObjectListField(key, def, values, update));
+    } else if (def.type === 'range') {
+      field.appendChild(createRangeField(key, def, values, update));
     } else {
       const input = createInput(key, def);
       input.addEventListener('input', () => {
@@ -116,6 +118,57 @@ function createInput(key, def) {
   input.id = `field-${key}`;
   if (def.placeholder && 'placeholder' in input) input.placeholder = def.placeholder;
   return input;
+}
+
+// Deslizador + input numérico sincronizados (type: 'range').
+// Admite min, max y step en el schema (por defecto 0, 100 y 1).
+function createRangeField(key, def, values, onChange) {
+  const min = def.min ?? 0;
+  const max = def.max ?? 100;
+  const step = def.step ?? 1;
+  const clamp = v => Math.min(max, Math.max(min, v));
+
+  const wrapper = document.createElement('div');
+  wrapper.className = 'range-field';
+
+  const slider = document.createElement('input');
+  slider.type = 'range';
+  slider.id = `field-${key}`;
+  slider.min = min;
+  slider.max = max;
+  slider.step = step;
+  slider.value = def.default;
+
+  const number = document.createElement('input');
+  number.type = 'number';
+  number.className = 'range-number';
+  number.min = min;
+  number.max = max;
+  number.step = step;
+  number.value = def.default;
+
+  slider.addEventListener('input', () => {
+    number.value = slider.value;
+    values[key] = slider.value;
+    onChange();
+  });
+
+  number.addEventListener('input', () => {
+    if (number.value === '' || Number.isNaN(Number(number.value))) return; // esperar a que termine de escribir
+    const v = clamp(Number(number.value));
+    slider.value = v;
+    values[key] = String(v);
+    onChange();
+  });
+
+  // Al salir del campo, el número vuelve al valor real (ya limitado a min/max)
+  number.addEventListener('change', () => {
+    number.value = slider.value;
+  });
+
+  wrapper.appendChild(slider);
+  wrapper.appendChild(number);
+  return wrapper;
 }
 
 function createListField(key, def, values, onChange) {
