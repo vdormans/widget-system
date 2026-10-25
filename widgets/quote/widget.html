@@ -25,6 +25,8 @@
             --border-width: 1px;
             --border-color: #ffffff;
             --text-color: #ffffff;
+            --text-x: 50%;
+            --text-y: 50%;
         }
         .quote-card {
             position: relative;
@@ -52,18 +54,27 @@
             color: var(--text-color);
             margin-bottom: 24px;
         }
-        .quote-text-wrap {
-            position: relative;
+        /* Capa con el mismo margen interno de la tarjeta; el texto se ubica libremente dentro */
+        .quote-text-layer {
+            position: absolute;
+            inset: 32px 28px;
             z-index: 1;
-            flex: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            pointer-events: none;
         }
+        /* left/top en % + translate negativo del mismo %: en 0 queda pegado al borde
+           izquierdo/superior, en 50 centrado y en 100 pegado al borde derecho/inferior,
+           sin salirse nunca de la tarjeta */
         .quote-text {
+            position: absolute;
+            left: var(--text-x);
+            top: var(--text-y);
+            transform: translate(calc(var(--text-x) * -1), calc(var(--text-y) * -1));
+            width: max-content;
+            max-width: 100%;
             text-align: center;
             font-size: 17px;
             line-height: 1.5;
+            overflow-wrap: break-word;
             color: var(--text-color);
         }
         .quote-text::before {
@@ -76,6 +87,7 @@
             position: relative;
             z-index: 1;
             align-self: flex-end;
+            margin-top: auto;
             font-size: 13px;
             font-style: italic;
             color: var(--text-color);
@@ -87,7 +99,7 @@
     <div class="quote-card" id="quote-card">
         <div class="quote-overlay" id="quote-overlay"></div>
         <div class="quote-symbol" id="quote-symbol"></div>
-        <div class="quote-text-wrap">
+        <div class="quote-text-layer">
             <div class="quote-text" id="quote-text"></div>
         </div>
         <div class="quote-author" id="quote-author"></div>
