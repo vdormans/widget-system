@@ -12,6 +12,11 @@ document.documentElement.style.setProperty('--border-width', BORDER_MAP[config.b
 document.documentElement.style.setProperty('--border-color', config.borderColor);
 document.documentElement.style.setProperty('--text-color', config.textColor);
 
+// Posición del texto en % (50/50 = centrado). Se limita a 0-100 por si la URL trae otro valor.
+const toPercent = v => (Number.isFinite(v) ? Math.min(100, Math.max(0, v)) : 50);
+document.documentElement.style.setProperty('--text-x', `${toPercent(config.textX)}%`);
+document.documentElement.style.setProperty('--text-y', `${toPercent(config.textY)}%`);
+
 const cardEl = document.getElementById('quote-card');
 const overlayEl = document.getElementById('quote-overlay');
 const symbolEl = document.getElementById('quote-symbol');
