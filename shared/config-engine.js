@@ -8,9 +8,11 @@
 // Tipos cuyo valor es un array/objeto y se serializa como JSON en la URL
 const JSON_TYPES = ['list', 'object-list'];
 
-// Lee los parámetros actuales de la URL (usado DENTRO del widget.html)
-export function readParams(schema) {
-  const params = new URLSearchParams(window.location.search);
+// Lee los parámetros de la URL (usado DENTRO del widget.html).
+// `search` es opcional: por defecto lee la URL actual; también puede recibir el
+// query string de otra URL (ej. la URL final generada en configure.html).
+export function readParams(schema, search = window.location.search) {
+  const params = new URLSearchParams(search);
   const values = {};
 
   Object.entries(schema.params).forEach(([key, def]) => {
@@ -26,6 +28,7 @@ export function readParams(schema) {
         values[key] = raw === 'true';
         break;
       case 'number':
+      case 'range':
         values[key] = Number(raw);
         break;
       case 'list':
