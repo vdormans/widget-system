@@ -27,7 +27,10 @@ export default {
         }
       ]
     },
-    overlayOpacity: { type: 'number', label: 'Oscurecido sobre la imagen (0-100)', default: 45 },
+    overlayOpacity: { type: 'range', label: 'Oscurecido sobre la imagen (0-100)', default: 45, min: 0, max: 100, step: 1 },
+
+    textX: { type: 'range', label: 'Posición horizontal del texto (0 = izquierda, 100 = derecha)', default: 50, min: 0, max: 100, step: 1 },
+    textY: { type: 'range', label: 'Posición vertical del texto (0 = arriba, 100 = abajo)',        default: 50, min: 0, max: 100, step: 1 },
 
     textColor:    { type: 'color',  label: 'Color de texto',           default: '#ffffff' },
     aspectRatio:  { type: 'select', label: 'Formato',                  options: ['1:1', '3:4', '9:16'], default: '3:4' },
