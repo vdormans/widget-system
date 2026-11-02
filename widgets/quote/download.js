@@ -14,14 +14,14 @@ const CARD_WIDTH = 340;        // max-width de .quote-card
 const PAD_X = 28;
 const PAD_Y = 32;
 const SCALE = 3;               // 340px → 1020px de ancho (buena calidad para WhatsApp / TikTok)
-const TEXT_SIZE = 17;
-const TEXT_LINE_HEIGHT = TEXT_SIZE * 1.5;
 const SYMBOL_SIZE = 32;
 const SYMBOL_LINE_HEIGHT = SYMBOL_SIZE * 1.5;
 const AUTHOR_SIZE = 13;
 const AUTHOR_LINE_HEIGHT = AUTHOR_SIZE * 1.5;
 const FONT_FAMILY = "PoppinsExport, Poppins, system-ui, sans-serif";
 
+const WEIGHT_MAP = { 'Extra fino': 200, Fino: 300, Normal: 400, Medio: 500, Seminegrita: 600, Negrita: 700, 'Extra negrita': 800 };
+const ALIGN_MAP = { Centrado: 'center', Izquierda: 'left', Derecha: 'right' };
 const BORDER_MAP = { Ninguno: 0, Fino: 1, Medio: 3, Grueso: 6 };
 const RATIO_MAP = { '1:1': 1, '3:4': 3 / 4, '9:16': 9 / 16 }; // ancho / alto
 
@@ -66,7 +66,13 @@ export function setupDownload({ buttonEl, urlOutputEl, statusEl }) {
 }
 
 export async function renderQuoteImage(config) {
-  await loadFont();
+  // Tamaño, grosor y alineación del texto (mismos límites y valores que widget.js)
+  const textSize = Number.isFinite(config.textSize) ? Math.min(48, Math.max(10, config.textSize)) : 17;
+  const textWeight = WEIGHT_MAP[config.textWeight] || 400;
+  const textAlign = ALIGN_MAP[config.textAlign] || 'center';
+  const lineHeight = textSize * 1.5;
+
+  await loadFont(textWeight, textSize);
 
   const ratio = RATIO_MAP[config.aspectRatio] || RATIO_MAP['3:4'];
   const W = CARD_WIDTH;
@@ -142,17 +148,19 @@ export async function renderQuoteImage(config) {
   // ---- Frase (posición libre en % dentro del área de contenido) ----
   // El navegador colapsa espacios y saltos de línea; se replica igual para que coincida con el widget
   const fullText = `\u201C${String(config.text).replace(/\s+/g, ' ')}\u201D`;
-  ctx.font = `400 ${TEXT_SIZE}px ${FONT_FAMILY}`;
-  ctx.textAlign = 'center';
+  ctx.font = `${textWeight} ${textSize}px ${FONT_FAMILY}`;
+  ctx.textAlign = textAlign;
   const lines = wrapText(ctx, fullText, layerW);
   const boxW = Math.min(ctx.measureText(fullText).width, layerW);
-  const boxH = lines.length * TEXT_LINE_HEIGHT;
+  const boxH = lines.length * lineHeight;
   const px = clampPercent(config.textX) / 100;
   const py = clampPercent(config.textY) / 100;
   const boxLeft = layerX + px * layerW - px * boxW;
   const boxTop = layerY + py * layerH - py * boxH;
+  // Las líneas se alinean dentro de la caja del texto (izquierda, centro o derecha de la caja)
+  const lineX = textAlign === 'left' ? boxLeft : textAlign === 'right' ? boxLeft + boxW : boxLeft + boxW / 2;
   lines.forEach((line, i) => {
-    drawLine(ctx, line, boxLeft + boxW / 2, boxTop + i * TEXT_LINE_HEIGHT, TEXT_LINE_HEIGHT);
+    drawLine(ctx, line, lineX, boxTop + i * lineHeight, lineHeight);
   });
 
   return new Promise((resolve, reject) => {
@@ -248,26 +256,27 @@ function loadImage(url) {
 
 // Carga Poppins (la misma tipografía del widget) bajo un nombre propio, para que el
 // canvas la use sin cambiar la tipografía de la página de configuración.
-let fontPromise = null;
-function loadFont() {
-  if (!fontPromise) {
-    fontPromise = (async () => {
-      try {
-        const res = await fetch('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+let fontCssPromise = null;
+async function loadFont(weight, size) {
+  try {
+    if (!fontCssPromise) {
+      fontCssPromise = (async () => {
+        const res = await fetch('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700;800&display=swap');
         const css = (await res.text()).replace(/font-family:\s*'Poppins'/g, "font-family: 'PoppinsExport'");
         const style = document.createElement('style');
         style.textContent = css;
         document.head.appendChild(style);
-        await Promise.all([
-          document.fonts.load(`400 ${TEXT_SIZE}px PoppinsExport`, 'áéíóúñ¿¡“”AaZz'),
-          document.fonts.load(`400 ${SYMBOL_SIZE}px PoppinsExport`)
-        ]);
-      } catch {
-        /* sin conexión a Google Fonts: se usa Poppins local o la tipografía del sistema */
-      }
-    })();
+      })();
+    }
+    await fontCssPromise;
+    await Promise.all([
+      document.fonts.load(`${weight} ${size}px PoppinsExport`, 'áéíóúñ¿¡“”AaZz'),
+      document.fonts.load(`400 ${AUTHOR_SIZE}px PoppinsExport`),
+      document.fonts.load(`400 ${SYMBOL_SIZE}px PoppinsExport`)
+    ]);
+  } catch {
+    /* sin conexión a Google Fonts: se usa Poppins local o la tipografía del sistema */
   }
-  return fontPromise;
 }
 
 function saveBlob(blob, filename) {
