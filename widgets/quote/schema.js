@@ -29,6 +29,10 @@ export default {
     },
     overlayOpacity: { type: 'range', label: 'Oscurecido sobre la imagen (0-100)', default: 45, min: 0, max: 100, step: 1 },
 
+    textAlign:  { type: 'select', label: 'Alineación del texto', options: ['Centrado', 'Izquierda', 'Derecha'], default: 'Centrado' },
+    textSize:   { type: 'range',  label: 'Tamaño del texto (px)', default: 17, min: 10, max: 48, step: 1 },
+    textWeight: { type: 'select', label: 'Grosor del texto', options: ['Extra fino', 'Fino', 'Normal', 'Medio', 'Seminegrita', 'Negrita', 'Extra negrita'], default: 'Normal' },
+
     textX: { type: 'range', label: 'Posición horizontal del texto (0 = izquierda, 100 = derecha)', default: 50, min: 0, max: 100, step: 1 },
     textY: { type: 'range', label: 'Posición vertical del texto (0 = arriba, 100 = abajo)',        default: 50, min: 0, max: 100, step: 1 },
 
