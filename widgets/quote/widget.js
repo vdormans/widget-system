@@ -4,6 +4,8 @@ import { readParams } from '../../shared/config-engine.js';
 const config = readParams(schema);
 
 const BORDER_MAP = { Ninguno: '0px', Fino: '1px', Medio: '3px', Grueso: '6px' };
+const WEIGHT_MAP = { 'Extra fino': 200, Fino: 300, Normal: 400, Medio: 500, Seminegrita: 600, Negrita: 700, 'Extra negrita': 800 };
+const ALIGN_MAP = { Centrado: 'center', Izquierda: 'left', Derecha: 'right' };
 const RATIO_MAP = { '1:1': '1 / 1', '3:4': '3 / 4', '9:16': '9 / 16' };
 
 document.documentElement.style.setProperty('--radius', `${config.borderRadius}px`);
@@ -11,6 +13,12 @@ document.documentElement.style.setProperty('--aspect-ratio', RATIO_MAP[config.as
 document.documentElement.style.setProperty('--border-width', BORDER_MAP[config.borderWidth] || '0px');
 document.documentElement.style.setProperty('--border-color', config.borderColor);
 document.documentElement.style.setProperty('--text-color', config.textColor);
+
+// Alineación, tamaño (10-48px) y grosor del texto
+const textSize = Number.isFinite(config.textSize) ? Math.min(48, Math.max(10, config.textSize)) : 17;
+document.documentElement.style.setProperty('--text-align', ALIGN_MAP[config.textAlign] || 'center');
+document.documentElement.style.setProperty('--text-size', `${textSize}px`);
+document.documentElement.style.setProperty('--text-weight', WEIGHT_MAP[config.textWeight] || 400);
 
 // Posición del texto en % (50/50 = centrado). Se limita a 0-100 por si la URL trae otro valor.
 const toPercent = v => (Number.isFinite(v) ? Math.min(100, Math.max(0, v)) : 50);
